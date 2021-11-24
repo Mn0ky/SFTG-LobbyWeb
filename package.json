@@ -1,0 +1,21 @@
+{
+  "name": "sftg-lobby-viewer",
+  "version": "1.0.0",
+  "description": "Voting Falcon Player",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "socket.io": "^4.1.2",
+    "useragent": "^2.3.0"
+  },
+  "engines": {
+    "node": "14.x"
+  }
+}
