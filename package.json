@@ -1,21 +1,15 @@
 {
-  "name": "sftg-lobby-viewer",
+  "name": "stfg-lobbyweb2",
   "version": "1.0.0",
-  "description": "Voting Falcon Player",
-  "main": "main.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node main.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
     "express": "^4.17.1",
-    "socket.io": "^4.4.0",
-    "useragent": "^2.3.0"
-  },
-  "engines": {
-    "node": "14.x"
+    "socket.io": "^4.4.0"
   }
 }
