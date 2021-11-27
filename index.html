@@ -4,20 +4,58 @@
     <title>STFG Lobbies</title>
     <style>
         body { 
-            margin: 0; 
-            text-align: center; 
-            padding-bottom: 3rem; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background-color: cornflowerblue;
+          margin: 0; 
+          text-align: center; 
+          padding-bottom: 3rem; 
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+          background-color: darkslategrey;
         }
         h1 { 
-            font-size: 80px; 
+          font-size: 80px; 
         }
-        .sidebyside { 
-            display: inline-block; 
-            font-size: 40px; 
-            margin: 55px;
-        }   
+        .sidebysideTop { 
+          display: inline-block; 
+          font-size: 40px; 
+          margin: 55px;
+        }
+        #tableHolder {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-evenly;
+          column-gap: 50px;
+          row-gap: 50px;
+        }
+        #tableHolder table { 
+          display: inline-block; 
+          background-color: darkcyan;
+          padding: 15px;
+        }    
+        .tableGrid {
+          border: 2px solid #000;
+          border-radius: 25px;
+        }
+        .tableGrid h3 {
+          line-height: 0px;
+        }
+        table td {
+          border: 2px solid #000;
+          border-radius: 25px;
+          background-color: darkcyan;
+        }
+        .playerNames {
+          margin-left: auto;
+          margin-right: auto;
+          height: 110px;
+        }
+        .playerNames tr td {
+          margin-left: auto;
+          margin-right: auto;
+          font-size: 10pt;
+        
+        }
+        #decreaseNameSize {
+          font-size: 2pt;
+        }      
     </style>
   </head>
 <script src="/socket.io/socket.io.js"></script>
@@ -34,12 +72,126 @@
     console.log("Recieved updated count from server: " + newCount);  
     playerCount = "Players: " + newCount;
     document.getElementById("playerCount").innerHTML = playerCount;
-  });
+  });  
+
+  socket.on('LobbyListUpdate', function(lobbyList) {
+    console.log("Recieved updated lobbyList from server: " + lobbyList);
+
+    function CheckForFontResize(text, element) {
+      if (text.length >= 13) {
+        element.id = "decreaseNameSize";
+      }
+    }
+
+    const tableHolderDiv = document.getElementById("tableHolder");
+    const createLobbies = () => {
+      while (tableHolderDiv.firstChild) tableHolderDiv.removeChild(tableHolderDiv.firstChild);
+      
+      for (let num = 0; num < lobbyList.Lobbies.length; num++) {
+        const curlobby = lobbyList.Lobbies[num];
+        
+        console.log("creating a table!")
+        let lobbyTable = document.createElement('table');
+        lobbyTable.className = 'tableGrid';
+
+        let lobbyTableNumber = document.createElement('thead');
+
+        let lobbyTableNumberRow = document.createElement('tr');
+
+        let lobbyNumHeader = document.createElement('th');
+        lobbyNumHeader.innerText = "#" + num;
+        lobbyTableNumberRow.append(lobbyNumHeader);
+    
+
+        lobbyTableNumber.append(lobbyTableNumberRow);
+        lobbyTable.append(lobbyTableNumber);
+
+
+        let lobbyIdRow = document.createElement('tr');
+        let lobbyIdData = document.createElement('td');
+        lobbyIdData.innerText = "ID: " + curlobby.lobbyid;
+        lobbyIdRow.append(lobbyIdData);
+
+        let lobbyVerRow = document.createElement('tr');
+        let lobbyVerData = document.createElement('td');
+        CheckForFontResize(curlobby.ver, lobbyVerData);
+        lobbyVerData.innerText = "Ver: " + curlobby.ver;
+        lobbyVerRow.append(lobbyVerData);
+
+        let lobbyNamesRow = document.createElement('tr');
+        let lobbyNamesData = document.createElement('td');
+        let lobbyNamesCount = document.createElement('h3');
+        lobbyNamesCount.innerText = "Players: " + curlobby.names.length;
+        lobbyNamesData.append(lobbyNamesCount);
+        let lobbyNamesTable = document.createElement('table');
+        lobbyNamesTable.className = "playerNames";
+        for (let i = 0; i < curlobby.names.length; i++) {
+          const name = curlobby.names[i];
+          nameRow = document.createElement('tr');
+          nameData = document.createElement('td');
+          CheckForFontResize(name, nameData);
+          nameData.innerText = name;
+          nameRow.append(nameData);
+          lobbyNamesTable.append(nameRow);
+        }
+        lobbyNamesData.append(lobbyNamesTable);
+        lobbyNamesRow.append(lobbyNamesData);
+        
+        let lobbyGameLinkRow = document.createElement('tr');
+        let lobbyGameLinkData = document.createElement('td');
+        let lobbyGameLinkTag = document.createElement('a');
+        let joinText = document.createTextNode("Join!");
+        lobbyGameLinkTag.appendChild(joinText);
+        lobbyGameLinkTag.href = curlobby.joinlink;
+        lobbyGameLinkData.append(lobbyGameLinkTag);
+        lobbyGameLinkRow.append(lobbyGameLinkData);
+
+
+        lobbyTable.append(lobbyIdRow, lobbyVerRow, lobbyNamesRow, lobbyGameLinkRow);
+        tableHolderDiv.append(lobbyTable);
+      }
+    }
+    createLobbies();
+  }); 
 
 </script>
   <body>
-    <h1 id="titleHeader">Lobby Info</h1> 
-    <h2 id="playerCount" class="sidebyside">Players:</h1>
-    <h2 id="lobbyCount" class="sidebyside">Lobbies:</h1>
+    <h1 id="titleHeader">Stick Fight: The Game Lobby Info</h1> 
+    <h2 id="playerCount" class="sidebysideTop">Players:</h1>
+    <h2 id="lobbyCount" class="sidebysideTop">Lobbies:</h1>
+    <div id="tableHolder"></div> 
+    <!-- <table class="tableGrid">
+      <tr>
+        <th>Lobby #1</th>
+      </tr>
+      <tr>
+        <td>ID: 76561198052482214</td>
+      </tr>
+      <tr>
+        <td>Ver: 25</td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Players: 4</h3>
+          <table class="playerNames">
+            <tr>
+              <td>Bobby</td>
+            </tr>
+            <tr>
+              <td>GEeeEE</td>
+            </tr>
+            <tr>
+              <td>hgperhiherpupewphrprhpo</td>
+            </tr>
+            <tr>
+              <td>erg</td>
+            </tr>
+          </table>  
+        </td>
+      </tr>
+      <tr>
+        <td><a href="https://steamcommunity.com/id/zilosfootslave/">Join!</a></td>
+      </tr>
+    </table>  --> 
   </body>
 </html>
