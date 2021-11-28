@@ -24,6 +24,7 @@ app.post('/api/lobbycount', (req, res) => {
         id: lobbyCount.length + 1,
         num: req.body.num
     };
+    console.log("req body: " + req.body);
     console.log("new num: " + newCount.num);
     lobbyCount[0] = newCount.num;
     io.emit('LobbyCountUpdate', newCount.num);
@@ -41,10 +42,10 @@ app.post('/api/lobbylist', (req, res) => {
     console.log("lobbyid: " + newLobbyList.Lobbies[0].lobbyid);
     console.log("joinlink: " + newLobbyList.Lobbies[0].joinlink);
 
-    console.log("new name 1, 0: " + newLobbyList.Lobbies[1].names[0]);
+    /* console.log("new name 1, 0: " + newLobbyList.Lobbies[1].names[0]);
     console.log("version: " + newLobbyList.Lobbies[1].ver);
     console.log("lobbyid: " + newLobbyList.Lobbies[1].lobbyid);
-    console.log("joinlink: " + newLobbyList.Lobbies[1].joinlink);
+    console.log("joinlink: " + newLobbyList.Lobbies[1].joinlink); */
 
     lobbies[0] = newLobbyList;
     io.emit('LobbyListUpdate', newLobbyList);
