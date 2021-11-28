@@ -76,6 +76,7 @@
 
   socket.on('LobbyListUpdate', function(lobbyList) {
     console.log("Recieved updated lobbyList from server: " + lobbyList);
+    console.log("lobby list has value, testing: " + lobbyList.Lobbies[0].ver)
 
     function CheckForFontResize(text, element) {
       if (text.length >= 13) {
@@ -149,7 +150,7 @@
 
         lobbyTable.append(lobbyIdRow, lobbyVerRow, lobbyNamesRow, lobbyGameLinkRow);
         tableHolderDiv.append(lobbyTable);
-      }
+      } 
     }
     createLobbies();
   }); 

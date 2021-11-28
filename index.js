@@ -41,11 +41,6 @@ app.post('/api/lobbylist', (req, res) => {
     console.log("lobbyid: " + newLobbyList.Lobbies[0].lobbyid);
     console.log("joinlink: " + newLobbyList.Lobbies[0].joinlink);
 
-    /* console.log("new name 1, 0: " + newLobbyList.Lobbies[1].names[0]);
-    console.log("version: " + newLobbyList.Lobbies[1].ver);
-    console.log("lobbyid: " + newLobbyList.Lobbies[1].lobbyid);
-    console.log("joinlink: " + newLobbyList.Lobbies[1].joinlink); */
-
     lobbies = newLobbyList;
     io.emit('LobbyListUpdate', newLobbyList);
     console.log("sent new lobby!");
@@ -55,8 +50,11 @@ app.post('/api/lobbylist', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected');
   UpdateSFPlayerCount();
-  // io.emit('LobbyListUpdate', lobbies);
-  // io.emit('LobbyListUpdate', lobbyCount);
+  if (lobbies && lobbyCount != null) {
+    console.log("lobby list has value, testing: " + lobbies.Lobbies[0].ver)  
+    io.emit('LobbyListUpdate', lobbies);
+    io.emit('LobbyCountUpdate', lobbyCount);
+  }
 });
 
 function UpdateSFPlayerCount() {
