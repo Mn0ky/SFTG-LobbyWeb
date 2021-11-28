@@ -55,8 +55,8 @@ app.post('/api/lobbylist', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected');
   UpdateSFPlayerCount();
-  io.emit('LobbyListUpdate', lobbies);
-  io.emit('LobbyListUpdate', lobbyCount);
+  // io.emit('LobbyListUpdate', lobbies);
+  // io.emit('LobbyListUpdate', lobbyCount);
 });
 
 function UpdateSFPlayerCount() {
