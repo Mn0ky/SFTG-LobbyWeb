@@ -8,7 +8,7 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 var playerCount;
-var lobbyCount = [];
+var lobbyCount;
 var lobbies;
 
 app.use(express.json());
@@ -26,7 +26,7 @@ app.post('/api/lobbycount', (req, res) => {
     };
     console.log("req body: " + req.body);
     console.log("new num: " + newCount.num);
-    lobbyCount[0] = newCount.num;
+    lobbyCount = newCount.num;
     io.emit('LobbyCountUpdate', newCount.num);
     console.log("send new lobby num");
     res.send(newCount);
@@ -57,6 +57,7 @@ io.on('connection', (socket) => {
   console.log('a user connected');
   UpdateSFPlayerCount();
   io.emit('LobbyListUpdate', lobbies);
+  io.emit('LobbyListUpdate', lobbyCount);
 });
 
 function UpdateSFPlayerCount() {
