@@ -21,7 +21,6 @@ app.get('/', (req, res) => {
 
 app.post('/api/lobbycount', (req, res) => {
     const newCount = {
-        id: lobbyCount.length + 1,
         num: req.body.num
     };
     console.log("req body: " + req.body);
