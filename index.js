@@ -9,7 +9,7 @@ const io = new Server(server);
 
 var playerCount;
 var lobbyCount = [];
-var lobbies = [];
+var lobbies;
 
 app.use(express.json());
 
@@ -47,7 +47,7 @@ app.post('/api/lobbylist', (req, res) => {
     console.log("lobbyid: " + newLobbyList.Lobbies[1].lobbyid);
     console.log("joinlink: " + newLobbyList.Lobbies[1].joinlink); */
 
-    lobbies[0] = newLobbyList;
+    lobbies = newLobbyList;
     io.emit('LobbyListUpdate', newLobbyList);
     console.log("sent new lobby!");
     res.send(newLobbyList);
@@ -56,6 +56,7 @@ app.post('/api/lobbylist', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected');
   UpdateSFPlayerCount();
+  io.emit('LobbyListUpdate', lobbies);
 });
 
 function UpdateSFPlayerCount() {
